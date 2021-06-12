@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { isEmail } = require("validator");
 const Schema = mongoose.Schema;
-
+const bcrypt = require("bcrypt");
 const UserSchema = new Schema({
     firstname: {
         type: String,
@@ -27,9 +27,14 @@ const UserSchema = new Schema({
     },
     status: { type: String, enum: ["user", "admin"], default: "user" },
 });
+UserSchema.post("validate", async (doc, next) => {
+    const salt = await bcrypt.genSalt();
+    doc.password = await bcrypt.hash(doc.password, salt);
+    next();
+});
 
 UserSchema.virtual("fullname").get(() => `${this.firstname} ${this.lastname}`);
 
 UserSchema.virtual("url").get(() => `/user/${this._id}`);
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("user", UserSchema);
