@@ -10,7 +10,9 @@ const handleErrors = (error) => {
         lastname: "",
         confirm: "",
     };
-
+    if (err.code === 11000) {
+        errors["email"] = "that email is already registered.";
+    }
     //passwrod confirmation
     if (error.message.includes("passwords do not match")) {
         errors["confirm"] = error.message;
@@ -25,12 +27,36 @@ const handleErrors = (error) => {
     return errors;
 };
 
+const handleLoginErrors = (error) => {
+    let errors = {
+        email: "",
+        password: "",
+    };
+    console.log(error);
+    if (error.message.includes("incorrect email")) {
+        errors.email = "that email is not regitered";
+    }
+    if (error.message.includes("incorrect password")) {
+        errors.password = "that password is incorrect";
+    }
+    return errors;
+};
 exports.login_get = (req, res, next) => {
     res.render("login_form", { title: "Login" });
 };
 
-exports.login_post = (req, res, next) => {
-    res.send("login form not yet implemented");
+exports.login_post = async (req, res, next) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.login(email, password);
+        const token = createToken(user._id);
+        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+        res.status(201).send({ user: user._id });
+    } catch (error) {
+        const errors = handleLoginErrors(error);
+        res.status(400).send({ errors });
+    }
 };
 exports.signUp_get = (req, res, next) => {
     res.render("signUp_form", { title: "Sign Up" });

@@ -1,13 +1,51 @@
 <% include partials/header.ejs %>
-<form action="/login" method="post">
-    <label for="username">
+<form>
+    <label for="email">
         User Name
-        <input type="text" name="username" id="username" />
+        <input type="email" name="email" id="email" />
     </label>
+    <div class="error" id="email-error"></div>
     <label for="password">
         Password
-        <input type="text" name="password" id="password" />
+        <input type="password" name="password" id="password" />
     </label>
-    <input type="submit" value="login" />
+    <div class="error" id="password-error"></div>
+    <button type="submit">Login</button>
 </form>
+<script>
+    const form = document.querySelector("form");
+    const passwordError = document.querySelector("#password-error");
+    const emailError = document.querySelector("#email-error");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        emailError.textContent = "";
+        passwordError.textContent = "";
+
+        //get the values
+        const email = form.email.value;
+        const password = form.password.value;
+        try {
+            const res = await fetch("/login", {
+                method: "POST",
+                body: JSON.stringify({
+                    email,
+                    password,
+                }),
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await res.json();
+            if (data.errors) {
+                emailError.textContent = data.errors.email;
+                passwordError.textContent = data.errors.password;
+            }
+            if (data.user) {
+                location.assign("/");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+</script>
 <% include partials/footer.ejs %>

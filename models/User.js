@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { isEmail } = require("validator");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
-const UserSchema = new Schema({
+const userSchema = new Schema({
     firstname: {
         type: String,
         required: [true, "please enter your first name"],
@@ -27,14 +27,30 @@ const UserSchema = new Schema({
     },
     status: { type: String, enum: ["user", "admin"], default: "user" },
 });
-UserSchema.post("validate", async (doc, next) => {
+
+//statics
+userSchema.statics.login = async function (email, password) {
+    const user = await this.findOne({ email });
+    if (user) {
+        const auth = await bcrypt.compare(password, user.password);
+        if (auth) {
+            return user;
+        }
+        throw new Error("incorrect password");
+    }
+    throw new Error("incorrect email");
+};
+
+//hooks
+userSchema.post("validate", async (doc, next) => {
     const salt = await bcrypt.genSalt();
     doc.password = await bcrypt.hash(doc.password, salt);
     next();
 });
 
-UserSchema.virtual("fullname").get(() => `${this.firstname} ${this.lastname}`);
+//virtual properties
+userSchema.virtual("fullname").get(() => `${this.firstname} ${this.lastname}`);
 
-UserSchema.virtual("url").get(() => `/user/${this._id}`);
+userSchema.virtual("url").get(() => `/user/${this._id}`);
 
-module.exports = mongoose.model("user", UserSchema);
+module.exports = mongoose.model("user", userSchema);
