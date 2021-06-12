@@ -1,21 +1,22 @@
 const User = require("../models/User");
 
+const jwt = require("jsonwebtoken");
 const handleErrors = (error) => {
     console.log(error.message, error.code);
     let errors = {
         email: "",
         password: "",
-        firstName: "",
-        lastName: "",
-        passwordConfrimation: "",
+        firstname: "",
+        lastname: "",
+        confirm: "",
     };
 
     //passwrod confirmation
     if (error.message.includes("passwords do not match")) {
-        errors["passwordConfrimation"] = error.message;
+        errors["confirm"] = error.message;
     }
     //validation Errors
-    else if (error.message.includes("User validation failed")) {
+    else if (error.message.includes("user validation failed")) {
         Object.values(error.errors).forEach(({ properties }) => {
             console.log(properties);
             errors[properties["path"]] = properties["message"];
@@ -34,7 +35,12 @@ exports.login_post = (req, res, next) => {
 exports.signUp_get = (req, res, next) => {
     res.render("signUp_form", { title: "Sign Up" });
 };
-
+const maxAge = 60 * 60 * 24 * 3;
+const createToken = (id) => {
+    return jwt.sign({ id }, "mrtuz secret", {
+        expiresIn: maxAge,
+    });
+};
 exports.signUp_post = async (req, res, next) => {
     const { email, password, firstname, lastname, passwordConfirmation } =
         req.body;
@@ -48,9 +54,12 @@ exports.signUp_post = async (req, res, next) => {
             password,
             joidDate: new Date().now,
         });
-        res.status(200).send({ user });
+        const token = createToken(user._id);
+        res.cookie("jwt", token, { maxAge: maxAge * 1000, httpOnly: true });
+        res.status(201).send({ user: user._id });
     } catch (error) {
         const errors = handleErrors(error);
-        res.status(400).json(errors);
+        console.log(errors);
+        res.status(400).json({ errors });
     }
 };
