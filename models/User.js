@@ -49,7 +49,9 @@ userSchema.post("validate", async (doc, next) => {
 });
 
 //virtual properties
-userSchema.virtual("fullname").get(() => `${this.firstname} ${this.lastname}`);
+userSchema.virtual("fullname").get(function () {
+    return `${this.firstname} ${this.lastname}`;
+});
 
 userSchema.virtual("url").get(() => `/user/${this._id}`);
 

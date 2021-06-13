@@ -7,6 +7,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var mongoose = require("mongoose");
 var authRouter = require("./routes/authRoutes");
+const { checkUser, requireAuth } = require("./middleware/authMiddleware");
 var app = express();
 
 // view engine setup
@@ -35,6 +36,7 @@ mongoose
         console.log(err);
     });
 
+app.use("*", checkUser);
 app.use("/", indexRouter);
 app.use("/", authRouter);
 app.use("/users", usersRouter);
