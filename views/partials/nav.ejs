@@ -3,6 +3,8 @@
         <li><a href="/">Home</a></li>
         <% if(locals.user){ %>
         <li><h3>Welcome to the secret club <%= user.fullname %></h3></li>
+
+        <li><a href="/story">Create a Story</a></li>
         <li><a href="/logout">Log Out</a></li>
         <li><a href=<%= user.url %>>Profile<a> </li>
         <% } else{ %>

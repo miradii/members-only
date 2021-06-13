@@ -53,6 +53,8 @@ userSchema.virtual("fullname").get(function () {
     return `${this.firstname} ${this.lastname}`;
 });
 
-userSchema.virtual("url").get(() => `/user/${this._id}`);
+userSchema.virtual("url").get(function () {
+    return `/user/${this._id}`;
+});
 
 module.exports = mongoose.model("user", userSchema);
