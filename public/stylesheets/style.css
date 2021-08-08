@@ -20,6 +20,7 @@ body {
     background-color: var(--onyx);
     color: var(--mauve);
     height: 100%;
+    width: 100%;
 }
 
 nav {
@@ -48,6 +49,10 @@ nav ul {
 
 .content {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
 }
 footer {
     bottom: 0;
@@ -68,12 +73,14 @@ form {
     background-color: var(--rich-black-fogra-29);
 }
 
-input {
+input,
+textarea {
     padding: 10px 12px;
     border-radius: 4px;
     border: 1px solid #ddd;
     font-size: 1em;
     width: 100%;
+    resize: none;
 }
 label {
     display: block;
@@ -92,4 +99,33 @@ button {
     display: block;
     padding: 10px 16px;
     letter-spacing: 2px;
+}
+
+.story-container {
+    width: 75%;
+    margin: auto;
+    border-radius: 2px;
+    background-color: var(--quick-silver);
+    align-self: center;
+    margin-bottom: 5px;
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 25% 1fr;
+}
+.story {
+    text-align: left;
+    padding: 8px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--onyx);
+}
+.info {
+    background-color: var(--orange-pantone);
+    border-right: #ddd solid 0.25px;
+    text-align: left;
+    padding: 4px;
+}
+@media only screen and (max-width: 600px) {
+    .story-container {
+        grid-template-columns: 1fr 2fr;
+    }
 }

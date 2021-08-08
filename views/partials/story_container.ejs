@@ -1,0 +1,14 @@
+<div class="story-container">
+    <div class="info">
+        <% if (user) { %>
+
+        <div class="author">author: <%= story.author.fullname %></div>
+        <% } else{ %>
+        <div class="author">author: annonymos</div>
+        <% } %>
+        <div class="topic">topic: <%= story.topic %></div>
+    </div>
+    <div class="story">
+        <div class="message"><%= story.message %></div>
+    </div>
+</div>

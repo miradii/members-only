@@ -1,6 +1,15 @@
-    <% include partials/header.ejs %>  
-        <div class="content">
-            <h1>Welcome to <%= title %></h1>
-            <p>Share your stories with the world!</p>
-        </div>
-    <% include partials/footer.ejs %> 
+<% include partials/header.ejs %>
+<div class="content">
+    <% if(locals.user){ %>
+    <h3>Welcome <%= user.firstname %></h3>
+    <% } %>
+
+    <h4>Share your stories with the world!</h4>
+
+    <% if(stories) { %> <% for (story of stories) { %>
+    <div><%- include("partials/story_container.ejs",{story}); %></div>
+    <% } %> <% } else { %>
+    <h3>No stories to show</h3>
+    <% } %>
+</div>
+<% include partials/footer.ejs %>

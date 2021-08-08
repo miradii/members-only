@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const StorySchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "user",
         required: [true, "story should have and author"],
     },
     topic: {

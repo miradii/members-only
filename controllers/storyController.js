@@ -1,10 +1,10 @@
 const Story = require("../models/Story");
 
-module.exports.getStory = (req, res, next) => {
+module.exports.getStory = (req, res) => {
     res.render("story_form", { title: "Create a Story" });
 };
 
-module.exports.postStory = async (req, res, next) => {
+module.exports.postStory = async (req, res) => {
     const { topic, story: message } = req.body;
     try {
         const author = res.locals.user;
