@@ -11,4 +11,27 @@
     <div class="story">
         <div class="message"><%= story.message %></div>
     </div>
+    <% if (user) { %> <% if (user.id === story.author.id) { %>
+    <button
+        id="deleteBtn"
+        onclick="deleteStory(this.value)"
+        value="<%= story.id %>"
+    >
+        Delete
+    </button>
+    <% } %> <% } %>
 </div>
+
+<script>
+    async function deleteStory(id) {
+        try {
+            const res = await fetch(`/story/${id}`, {
+                method: "delete",
+            });
+
+            location.assign("/");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+</script>
