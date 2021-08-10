@@ -22,16 +22,4 @@
     <% } %> <% } %>
 </div>
 
-<script>
-    async function deleteStory(id) {
-        try {
-            const res = await fetch(`/story/${id}`, {
-                method: "delete",
-            });
-
-            location.assign("/");
-        } catch (error) {
-            console.log(error);
-        }
-    }
-</script>
+<script src="/javascripts/deleteStory.js"></script>

@@ -10,7 +10,7 @@ const handleErrors = (error) => {
         lastname: "",
         confirm: "",
     };
-    if (err.code === 11000) {
+    if (error.code === 11000) {
         errors["email"] = "that email is already registered.";
     }
     //passwrod confirmation

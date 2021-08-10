@@ -9,6 +9,7 @@ module.exports.postStory = async (req, res) => {
     try {
         const author = res.locals.user;
         const story = await Story.create({ topic, author, message: message });
+        console.log(story);
         res.status(200).send({ story });
     } catch (error) {
         res.status(400).send({ errors: "there were some errors" });
