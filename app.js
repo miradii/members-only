@@ -11,8 +11,12 @@ const storyRouter = require("./routes/storyRoutes");
 const { checkUser, requireAuth } = require("./middleware/authMiddleware");
 const { getAllStories } = require("./middleware/dataMiddleware");
 var app = express();
-
+// eslint-disable-next-line no-undef
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+}
 // view engine setup
+// eslint-disable-next-line no-undef
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -20,11 +24,12 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+// eslint-disable-next-line no-undef
 app.use(express.static(path.join(__dirname, "public")));
 
 // connect to  db
-const uri =
-    "mongodb+srv://murtuz:bayern456@cluster0.lpfso.mongodb.net/members-only?retryWrites=true&w=majority";
+// eslint-diable-next-line
+const uri = process.env.DB_URI;
 mongoose
     .connect(uri, {
         useNewUrlParser: true,
